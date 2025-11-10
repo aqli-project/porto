@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aqli</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Custom Styles -->
+    <style>
+
+        :root {
+            --primary: #1a1a1a;
+            --secondary: #f8f8f8;
+            --accent: #6366f1;
+        }
+        
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+        
+      
+        .parallax-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            overflow: hidden;
+        }
+        
+        .parallax-element {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(5px);
+        }
+        
+      
+        .page {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            display: none;
+        }
+        
+        .page.active {
+            opacity: 1;
+            transform: translateY(0);
+            display: block;
+        }
+        
+      
+        .nav-link {
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent);
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover::after,
+        .nav-link.active::after {
+            width: 100%;
+        }
+        
+        
+        .project-card {
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        .project-card:hover {
+            transform: translateY(-10px);
+        }
+        
+        
+        .social-icon {
+            transition: all 0.3s ease;
+        }
+        
+        .social-icon:hover {
+            transform: translateY(-8px) scale(1.1);
+        }
+        
+       
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.7; }
+            50% { transform: scale(1.05); opacity: 0.9; }
+        }
+        
+        @keyframes wave {
+            0% { transform: translateX(0) translateY(0) rotate(0deg); }
+            50% { transform: translateX(25px) translateY(-15px) rotate(5deg); }
+            100% { transform: translateX(50px) translateY(0) rotate(0deg); }
+        }
+        
+        @keyframes slideInRight {
+            0% { transform: translateX(100%); opacity: 0; }
+            100% { transform: translateX(0); opacity: 1; }
+        }
+        
+        @keyframes slideOutLeft {
+            0% { transform: translateX(0); opacity: 1; }
+            100% { transform: translateX(-100%); opacity: 0; }
+        }
+        
+        .float-animation {
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        .pulse-animation {
+            animation: pulse 4s ease-in-out infinite;
+        }
+        
+        .wave-animation {
+            animation: wave 8s linear infinite;
+        }
+        
+       
+        .text-animation {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 2.5rem;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .text-animation span {
+            position: absolute;
+            white-space: nowrap;
+            animation: slideInRight 0.7s ease-out forwards;
+            text-align: center;
+            width: 100%;
+        }
+        
+        .text-animation span.exit {
+            animation: slideOutLeft 0.7s ease-out forwards;
+        }
+        
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            pointer-events: none;
+            opacity: 0;
+            transform: scale(0);
+        }
+        
+        .particle.active {
+            opacity: 0.7;
+            transform: scale(1);
+            transition: all 0.5s ease-out;
+        }
+        
+        .wave {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 320'%3E%3Cpath fill='%23ffffff' fill-opacity='0.4' d='M0,192L48,197.3C96,203,192,213,288,229.3C384,245,480,267,576,250.7C672,235,768,181,864,181.3C960,181,1056,235,1152,234.7C1248,235,1344,181,1392,154.7L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z'%3E%3C/path%3E%3C/svg%3E");
+            background-size: cover;
+            opacity: 0.5;
+        }
+        
+        .wave-2 {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 80px;
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 320'%3E%3Cpath fill='%23ffffff' fill-opacity='0.6' d='M0,128L48,149.3C96,171,192,213,288,229.3C384,245,480,267,576,213.3C672,192,768,160,864,160C960,160,1056,192,1152,197.3C1248,203,1344,181,1392,170.7L1440,160L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z'%3E%3C/path%3E%3C/svg%3E");
+            background-size: cover;
+            opacity: 0.7;
+            animation: wave 10s linear infinite;
+        }
+        
+        
+        .custom-container {
+            width: 100%;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+            padding-left: 2rem;
+            padding-right: 2rem;
+        }
+        
+        @media (min-width: 640px) {
+            .custom-container {
+                padding-left: 3rem;
+                padding-right: 3rem;
+            }
+        }
+        
+        @media (min-width: 1024px) {
+            .custom-container {
+                padding-left: 4rem;
+                padding-right: 4rem;
+            }
+        }
+        
+        @media (min-width: 1280px) {
+            .custom-container {
+                padding-left: 5rem;
+                padding-right: 5rem;
+            }
+        }
+    </style>
+
+</head>
+<body class="bg-gray-50 text-gray-900 overflow-x-hidden">
+
+    
+    <div class="parallax-bg" id="parallaxBg">
+        
+        <div class="wave"></div>
+        <div class="wave-2"></div>
+    </div>
+    
+   
+    <nav class="fixed top-0 w-full bg-white/80 backdrop-blur-md shadow-sm z-50 transition-all duration-300">
+        <div class="custom-container py-4">
+            <div class="flex justify-between items-center">
+                
+                <div class="w-8"></div>
+                
+                
+                <div class="hidden md:flex justify-center items-center space-x-8">
+                    <a href="#" data-page="home" class="nav-link active font-medium" data-id="nav-home">Home</a>
+                    <a href="#" data-page="about" class="nav-link font-medium" data-id="nav-about">About</a>
+                    <a href="#" data-page="projects" class="nav-link font-medium" data-id="nav-projects">Projects</a>
+                    <a href="#" data-page="social" class="nav-link font-medium" data-id="nav-social">Social</a>
+                </div>
+                
+                
+                <div class="flex items-center space-x-3">
+                   
+                    <button id="langSwitch" class="p-2 rounded-full hover:bg-gray-200 transition-colors">
+                        <i class="fas fa-language text-gray-700"></i>
+                    </button>
+                    
+                    
+                    <button id="mobileMenuBtn" class="md:hidden">
+                        <i class="fas fa-bars text-xl text-gray-700"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mobile Menu -->
+        <div id="mobileMenu" class="hidden md:hidden bg-white border-t">
+            <div class="custom-container py-4 space-y-3">
+                <a href="#" data-page="home" class="block nav-link active font-medium" data-id="nav-home-mobile">Home</a>
+                <a href="#" data-page="about" class="block nav-link font-medium" data-id="nav-about-mobile">About</a>
+                <a href="#" data-page="projects" class="block nav-link font-medium" data-id="nav-projects-mobile">Projects</a>
+                <a href="#" data-page="social" class="block nav-link font-medium" data-id="nav-social-mobile">Social</a>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Main Content -->
+    <main class="pt-20 min-h-screen">
+
+        <!-- Home Page -->
+        <div id="home" class="page active">
+            <section class="min-h-screen flex items-center">
+                <div class="custom-container">
+                    <div class="flex flex-col items-center text-center">
+                        <div class="mb-12 max-w-3xl w-full">
+                            <h1 class="text-5xl md:text-6xl font-bold mb-6">
+                                <span data-id="greeting">Halo, Saya</span> <span class="text-indigo-600">Aqli</span>
+                            </h1>
+                            <div class="text-animation text-xl text-gray-600 mb-8">
+                                <span data-id="job-title">Frontend Developer</span>
+                            </div>
+
+                            <!--<div class="flex justify-center space-x-4">
+                                <a href="#projects" class="px-8 py-3 bg-indigo-600 text-white rounded-full font-medium hover:bg-indigo-700 transition-all transform hover:scale-105" data-id="btn-projects">
+                                    Lihat Projek
+                                </a>
+                                <a href="#about" class="px-8 py-3 border-2 border-indigo-600 text-indigo-600 rounded-full font-medium hover:bg-indigo-50 transition-all" data-id="btn-about">
+                                    Tentang Saya
+                                </a>
+                            </div> -->
+
+                        </div>  
+                    </div>
+                </div>
+            </section>
+        </div>
+        
+        <!-- About Page -->
+        <div id="about" class="page">
+            <section class="py-20">
+                <div class="custom-container">
+                    <h2 class="text-4xl font-bold text-center mb-16" data-id="about-title">Tentang Saya</h2>
+                    <div class="grid md:grid-cols-2 gap-12 items-center">
+                        <div>
+                             <img src="https://res.cloudinary.com/dxhjanqr0/image/upload/v1762741357/aqli5_fgpmu4.jpg" 
+     alt="About" 
+     class="rounded-2xl shadow-xl w-full">
+                        </div>
+                        <div>
+                            <p class="text-lg text-gray-700 mb-6" data-id="about-desc-1">
+                                 Saya adalah seorang frontend developer dengan pengalaman 1 tahun dalam membangun website modern dan responsif. Spesialisasi saya mencakup HTML5, CSS, dan framework Laravel.
+                            </p>
+                            <p class="text-lg text-gray-700 mb-8" data-id="about-desc-2">
+                                Saya percaya bahwa desain yang baik harus fokus pada pengalaman pengguna, kecepatan, dan aksesibilitas. Saat ini saya sedang mendalami perancangan website dan teknologi frontend terbaru.
+                            </p>
+                            
+                            <h3 class="text-xl font-semibold mb-4" data-id="skills-title">Keahlian:</h3>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="flex items-center space-x-3">
+                                    <i class="fas fa-code text-indigo-600"></i>
+                                    <span data-id="skill-1">HTML5, CSS</span>
+                                </div>
+                                <div class="flex items-center space-x-3">
+                                    <i class="fas fa-layer-group text-indigo-600"></i>
+                                    <span data-id="skill-2">Laravel, Filament</span>
+                                </div>
+                                <div class="flex items-center space-x-3">
+                                    <i class="fas fa-mobile-alt text-indigo-600"></i>
+                                    <span data-id="skill-4">Responsive Design</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+        
+        <!-- Projects Page -->
+        <div id="projects" class="page">
+            <section class="py-20">
+                <div class="custom-container">
+                    <h2 class="text-4xl font-bold text-center mb-16" data-id="projects-title">Projek Terbaru</h2>
+                    <div class="grid md:grid-cols-3 gap-8">
+
+                        <!-- Project 1 -->
+                        <div class="project-card bg-white rounded-2xl overflow-hidden shadow-lg">
+                            <img src="https://media.discordapp.net/attachments/445929403843739649/1420665267763023933/image.png?ex=68d63922&is=68d4e7a2&hm=d60a39a7ca7be55d48fe4c8bcc06de28aeffeb6714cea6835168c8bbdc3b9366&=&format=webp&quality=lossless" alt="Project" class="w-full h-48 object-cover">
+                            <div class="p-6">
+                                <h3 class="text-xl font-bold mb-3">E-commerce Cake</h3>
+                                <p class="text-gray-600 mb-4" data-id="project-1-desc">Website e-commerce modern dengan fitur cart, payment gateway, dan admin panel.</p>
+                                <div class="flex flex-wrap gap-2 mb-4">
+                                    <span class="px-3 py-1 bg-indigo-100 text-indigo-800 rounded-full text-sm">Laravel</span>
+                                    <span class="px-3 py-1 bg-indigo-100 text-indigo-800 rounded-full text-sm">Filament</span>
+                                    <span class="px-3 py-1 bg-indigo-100 text-indigo-800 rounded-full text-sm">Mysql</span>
+                                </div>
+                                <div class="flex space-x-4">
+                                    <a href="#" class="text-indigo-600 hover:text-indigo-800">
+                                        <i class="fas fa-external-link-alt"></i> <span data-id="demo-btn">Demo</span>
+                                    </a>
+                                    <a href="#" class="text-gray-600 hover:text-gray-800">
+                                        <i class="fab fa-github"></i> <span data-id="code-btn">Code</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Project 2 -->
+                        <div class="project-card bg-white rounded-2xl overflow-hidden shadow-lg">
+                            <img src="https://via.placeholder.com/400x250?text=Project+2" alt="Project" class="w-full h-48 object-cover">
+                            <div class="p-6">
+                                <h3 class="text-xl font-bold mb-3">Minimarket Kasir Web</h3>
+                                <p class="text-gray-600 mb-4" data-id="project-2-desc">Aplikasi manajemen tugas dengan drag & drop, notifikasi, dan real-time update.</p>
+                                <div class="flex flex-wrap gap-2 mb-4">
+                                    <span class="px-3 py-1 bg-indigo-100 text-indigo-800 rounded-full text-sm">Laravel</span>
+                                    <span class="px-3 py-1 bg-indigo-100 text-indigo-800 rounded-full text-sm">Filament</span>
+                                    <span class="px-3 py-1 bg-indigo-100 text-indigo-800 rounded-full text-sm">Mysql</span>
+                                </div>
+                                <div class="flex space-x-4">
+                                    <a href="#" class="text-indigo-600 hover:text-indigo-800">
+                                        <i class="fas fa-external-link-alt"></i> <span data-id="demo-btn">Demo</span>
+                                    </a>
+                                    <a href="#" class="text-gray-600 hover:text-gray-800">
+                                        <i class="fab fa-github"></i> <span data-id="code-btn">Code</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Project 3 -->
+                        <div class="project-card bg-white rounded-2xl overflow-hidden shadow-lg">
+                            <img src="https://via.placeholder.com/400x250?text=Project+3" alt="Project" class="w-full h-48 object-cover">
+                            <div class="p-6">
+                                <h3 class="text-xl font-bold mb-3">Laundry Kasir Web</h3>
+                                <p class="text-gray-600 mb-4" data-id="project-3-desc">Website portofolio responsif dengan animasi modern dan performa tinggi.</p>
+                                <div class="flex flex-wrap gap-2 mb-4">
+                                    <span class="px-3 py-1 bg-indigo-100 text-indigo-800 rounded-full text-sm">Laravel</span>
+                                    <span class="px-3 py-1 bg-indigo-100 text-indigo-800 rounded-full text-sm">Filament</span>
+                                    <span class="px-3 py-1 bg-indigo-100 text-indigo-800 rounded-full text-sm">Mysql</span>
+                                </div>
+                                <div class="flex space-x-4">
+                                    <a href="#" class="text-indigo-600 hover:text-indigo-800">
+                                        <i class="fas fa-external-link-alt"></i> <span data-id="demo-btn">Demo</span>
+                                    </a>
+                                    <a href="#" class="text-gray-600 hover:text-gray-800">
+                                        <i class="fab fa-github"></i> <span data-id="code-btn">Code</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Project 4 -->
+                        <div class="project-card bg-white rounded-2xl overflow-hidden shadow-lg">
+                            <img src="https://via.placeholder.com/400x250?text=Project+3" alt="Project" class="w-full h-48 object-cover">
+                            <div class="p-6">
+                                <h3 class="text-xl font-bold mb-3">Kuliner Kasir Web</h3>
+                                <p class="text-gray-600 mb-4" data-id="project-3-desc">Website portofolio responsif dengan animasi modern dan performa tinggi.</p>
+                                <div class="flex flex-wrap gap-2 mb-4">
+                                    <span class="px-3 py-1 bg-indigo-100 text-indigo-800 rounded-full text-sm">Laravel</span>
+                                    <span class="px-3 py-1 bg-indigo-100 text-indigo-800 rounded-full text-sm">Filament</span>
+                                    <span class="px-3 py-1 bg-indigo-100 text-indigo-800 rounded-full text-sm">Mysql</span>
+                                </div>
+                                <div class="flex space-x-4">
+                                    <a href="#" class="text-indigo-600 hover:text-indigo-800">
+                                        <i class="fas fa-external-link-alt"></i> <span data-id="demo-btn">Demo</span>
+                                    </a>
+                                    <a href="#" class="text-gray-600 hover:text-gray-800">
+                                        <i class="fab fa-github"></i> <span data-id="code-btn">Code</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Project 5 -->
+                        <div class="project-card bg-white rounded-2xl overflow-hidden shadow-lg">
+                            <img src="https://via.placeholder.com/400x250?text=Project+3" alt="Project" class="w-full h-48 object-cover">
+                            <div class="p-6">
+                                <h3 class="text-xl font-bold mb-3">Barbershop Kasir Web</h3>
+                                <p class="text-gray-600 mb-4" data-id="project-3-desc">Website portofolio responsif dengan animasi modern dan performa tinggi.</p>
+                                <div class="flex flex-wrap gap-2 mb-4">
+                                    <span class="px-3 py-1 bg-indigo-100 text-indigo-800 rounded-full text-sm">Laravel</span>
+                                    <span class="px-3 py-1 bg-indigo-100 text-indigo-800 rounded-full text-sm">Filament</span>
+                                    <span class="px-3 py-1 bg-indigo-100 text-indigo-800 rounded-full text-sm">Mysql</span>
+                                </div>
+                                <div class="flex space-x-4">
+                                    <a href="#" class="text-indigo-600 hover:text-indigo-800">
+                                        <i class="fas fa-external-link-alt"></i> <span data-id="demo-btn">Demo</span>
+                                    </a>
+                                    <a href="#" class="text-gray-600 hover:text-gray-800">
+                                        <i class="fab fa-github"></i> <span data-id="code-btn">Code</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        
+
+                        <!-- Project 6 -->
+                        <div class="project-card bg-white rounded-2xl overflow-hidden shadow-lg">
+                            <img src="https://via.placeholder.com/400x250?text=Project+3" alt="Project" class="w-full h-48 object-cover">
+                            <div class="p-6">
+                                <h3 class="text-xl font-bold mb-3">Counter Pulsa Kasir Web</h3>
+                                <p class="text-gray-600 mb-4" data-id="project-3-desc">Website portofolio responsif dengan animasi modern dan performa tinggi.</p>
+                                <div class="flex flex-wrap gap-2 mb-4">
+                                    <span class="px-3 py-1 bg-indigo-100 text-indigo-800 rounded-full text-sm">Laravel</span>
+                                    <span class="px-3 py-1 bg-indigo-100 text-indigo-800 rounded-full text-sm">Filament</span>
+                                    <span class="px-3 py-1 bg-indigo-100 text-indigo-800 rounded-full text-sm">Mysql</span>
+                                </div>
+                                <div class="flex space-x-4">
+                                    <a href="#" class="text-indigo-600 hover:text-indigo-800">
+                                        <i class="fas fa-external-link-alt"></i> <span data-id="demo-btn">Demo</span>
+                                    </a>
+                                    <a href="#" class="text-gray-600 hover:text-gray-800">
+                                        <i class="fab fa-github"></i> <span data-id="code-btn">Code</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+            </section>
+        </div>
+        
+        <!-- Social Page -->
+        <div id="social" class="page">
+            <section class="py-20">
+                <div class="custom-container">
+                    <h2 class="text-4xl font-bold text-center mb-16" data-id="social-title">Hubungi Saya</h2>
+                    <div class="max-w-3xl mx-auto text-center">
+                        <p class="text-xl text-gray-600 mb-12" data-id="social-desc">
+                            Temukan saya di platform berikut atau kirim email langsung untuk kolaborasi
+                        </p>
+                        
+                        <div class="mb-12">
+                            <a href="mailto:aqli.poki@gmail.com" class="inline-block px-8 py-4 bg-indigo-600 text-white rounded-full font-medium hover:bg-indigo-700 transition-all transform hover:scale-105 shadow-lg">
+                                <i class="fas fa-envelope mr-2"></i> <span data-id="email-btn">Kirim Email</span>
+                            </a>
+                        </div>
+                        
+                        <div class="flex justify-center space-x-6">
+
+                            <a href="https://github.com/aqli-project" class="social-icon w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-lg hover:shadow-xl">
+                                <i class="fab fa-github text-2xl text-gray-800"></i>
+                            </a>
+                            <a href="https://www.linkedin.com/in/aqliwd/" class="social-icon w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-lg hover:shadow-xl">
+                                <i class="fab fa-linkedin-in text-2xl text-blue-600"></i>
+                            </a>
+                            <a href="https://linktr.ee/aqliwardhana" class="social-icon w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-lg hover:shadow-xl">
+                                <i class="fab fa-google text-2xl text-pink-500"></i>
+                            </a>
+
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+    
+    <!-- End -->
+   
+    
+
+    <!-- JavaScript -->
+    <script>
+        
+        const translations = {
+            
+            id: {
+                'nav-home': 'Home',
+                'nav-about': 'Tentang',
+                'nav-projects': 'Projek',
+                'nav-social': 'Sosial',
+                'nav-home-mobile': 'Home',
+                'nav-about-mobile': 'Tentang',
+                'nav-projects-mobile': 'Projek',
+                'nav-social-mobile': 'Sosial',
+                'greeting': 'Halo, Saya',
+                'job-title-1': 'Frontend Developer',
+                'job-title-2': 'Student',
+                'btn-projects': 'Lihat Projek',
+                'btn-about': 'Tentang Saya',
+                'about-title': 'Tentang Saya',
+                'about-desc-1': 'Saya adalah seorang frontend developer dengan pengalaman 1 tahun dalam membangun website modern dan responsif. Spesialisasi saya mencakup HTML5, CSS, dan framework Laravel.',
+                'about-desc-2': 'Saya percaya bahwa desain yang baik harus fokus pada pengalaman pengguna, kecepatan, dan aksesibilitas. Saat ini saya sedang mendalami perancangan website dan teknologi frontend terbaru.',
+                'skills-title': 'Keahlian:',
+                'skill-1': 'HTML5, CSS3',
+                'skill-2': 'Laravel, Filament',
+                'skill-4': 'Responsive Design',
+                'projects-title': 'Projek Terbaru',
+                'project-1-desc': 'Website e-commerce modern dengan fitur cart, payment gateway, dan admin panel.',
+                'project-2-desc': 'Aplikasi manajemen tugas dengan drag & drop, notifikasi, dan real-time update.',
+                'project-3-desc': 'Website portofolio responsif dengan animasi modern dan performa tinggi.',
+                'demo-btn': 'Demo',
+                'code-btn': 'Code',
+                'social-title': 'Hubungi Saya',
+                'social-desc': 'Temukan saya di platform berikut atau kirim email langsung untuk kolaborasi',
+                'email-btn': 'Kirim Email'
+            },
+
+            en: {
+                'nav-home': 'Home',
+                'nav-about': 'About',
+                'nav-projects': 'Projects',
+                'nav-social': 'Social',
+                'nav-home-mobile': 'Home',
+                'nav-about-mobile': 'About',
+                'nav-projects-mobile': 'Projects',
+                'nav-social-mobile': 'Social',
+                'greeting': 'Hello, I\'m',
+                'job-title-1': 'Frontend Developer',
+                'job-title-2': 'Student',
+                'btn-projects': 'View Projects',
+                'btn-about': 'About Me',
+                'about-title': 'About Me',
+                'about-desc-1': 'I am a frontend developer with 1 year of experience in building modern and responsive websites. My specializations include HTML5, CSS, and the Laravel framework.',
+                'about-desc-2': 'I believe that good design should focus on user experience, speed, and accessibility. I am currently studying website design and the latest frontend technologies.',
+                'skills-title': 'Skills:',
+                'skill-1': 'HTML5, CSS3',
+                'skill-2': 'Laravel, Filament',
+                'skill-4': 'Responsive Design',
+                'projects-title': 'Latest Projects',
+                'project-1-desc': 'Modern e-commerce website with cart, payment gateway, and admin panel features.',
+                'project-2-desc': 'Task management application with drag & drop, notifications, and real-time updates.',
+                'project-3-desc': 'Responsive portfolio website with modern animations and high performance.',
+                'demo-btn': 'Demo',
+                'code-btn': 'Code',
+                'social-title': 'Contact Me',
+                'social-desc': 'Find me on the following platforms or send an email directly for collaboration',
+                'email-btn': 'Send Email'
+            }
+        };
+        
+        
+        let currentLang = 'id';
+        
+        
+        const parallaxBg = document.getElementById('parallaxBg');
+        const elements = [];
+        const particles = [];
+        
+       
+        function createParallaxElements() {
+            for (let i = 0; i < 15; i++) {
+                const el = document.createElement('div');
+                el.className = 'parallax-element';
+                
+                
+                const size = Math.random() * 100 + 50;
+                el.style.width = `${size}px`;
+                el.style.height = `${size}px`;
+                
+                
+                el.style.left = `${Math.random() * 100}%`;
+                el.style.top = `${Math.random() * 100}%`;
+                
+                
+                const animations = ['float-animation', 'pulse-animation'];
+                el.classList.add(animations[Math.floor(Math.random() * animations.length)]);
+                
+                parallaxBg.appendChild(el);
+                elements.push({
+                    el: el,
+                    x: parseFloat(el.style.left),
+                    y: parseFloat(el.style.top),
+                    speed: Math.random() * 0.5 + 0.1
+                });
+            }
+        }
+        
+        
+        function createParticles() {
+            for (let i = 0; i < 30; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                
+                
+                const size = Math.random() * 10 + 5;
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                
+                
+                const colors = ['rgba(99, 102, 241, 0.7)', 'rgba(79, 70, 229, 0.7)', 'rgba(67, 56, 202, 0.7)'];
+                particle.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                
+                
+                particle.style.left = `${Math.random() * 100}%`;
+                particle.style.top = `${Math.random() * 100}%`;
+                
+                parallaxBg.appendChild(particle);
+                particles.push({
+                    el: particle,
+                    x: parseFloat(particle.style.left),
+                    y: parseFloat(particle.style.top),
+                    speed: Math.random() * 0.8 + 0.2
+                });
+            }
+        }
+        
+        
+        document.addEventListener('mousemove', (e) => {
+            const x = e.clientX / window.innerWidth;
+            const y = e.clientY / window.innerHeight;
+            
+            
+            elements.forEach(item => {
+                const moveX = (x - 0.5) * item.speed * 50;
+                const moveY = (y - 0.5) * item.speed * 50;
+                
+                item.el.style.transform = `translate(${moveX}px, ${moveY}px)`;
+            });
+            
+            
+            particles.forEach(item => {
+                const moveX = (x - 0.5) * item.speed * 100;
+                const moveY = (y - 0.5) * item.speed * 100;
+                
+                item.el.style.transform = `translate(${moveX}px, ${moveY}px)`;
+                item.el.classList.add('active');
+            });
+        });
+        
+        
+        document.addEventListener('mouseleave', () => {
+            particles.forEach(item => {
+                item.el.classList.remove('active');
+            });
+        });
+        
+       
+        const navLinks = document.querySelectorAll('.nav-link');
+        const pages = document.querySelectorAll('.page');
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        
+        function showPage(pageId) {
+            pages.forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            setTimeout(() => {
+                document.getElementById(pageId).classList.add('active');
+            }, 100);
+            
+           
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('data-page') === pageId) {
+                    link.classList.add('active');
+                }
+            });
+            
+           
+            mobileMenu.classList.add('hidden');
+        }
+        
+        navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const pageId = link.getAttribute('data-page');
+                showPage(pageId);
+            });
+        });
+        
+       
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+        
+        
+        const jobTitleElement = document.querySelector('[data-id="job-title"]');
+        const jobTitles = [
+            translations[currentLang]['job-title-1'],
+            translations[currentLang]['job-title-2']
+        ];
+        let currentJobIndex = 0;
+        
+        function animateJobTitle() {
+            
+            jobTitleElement.classList.add('exit');
+            
+            setTimeout(() => {
+                
+                currentJobIndex = (currentJobIndex + 1) % jobTitles.length;
+                jobTitleElement.textContent = jobTitles[currentJobIndex];
+                
+                
+                jobTitleElement.classList.remove('exit');
+            }, 700); 
+        }
+        
+        
+        setInterval(animateJobTitle, 3000);
+        
+      
+        const langSwitch = document.getElementById('langSwitch');
+        
+        langSwitch.addEventListener('click', () => {
+            
+            currentLang = currentLang === 'id' ? 'en' : 'id';
+            
+            
+            document.querySelectorAll('[data-id]').forEach(element => {
+                const id = element.getAttribute('data-id');
+                if (translations[currentLang][id]) {
+                    element.textContent = translations[currentLang][id];
+                }
+            });
+            
+            
+            jobTitles[0] = translations[currentLang]['job-title-1'];
+            jobTitles[1] = translations[currentLang]['job-title-2'];
+            
+            
+            jobTitleElement.textContent = jobTitles[currentJobIndex];
+        });
+        
+        
+        createParallaxElements();
+        createParticles();
+
+    </script>
+</body>
+</html>
